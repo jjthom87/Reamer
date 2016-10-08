@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Logout from '../Components/Logout';
+import { Router , browserHistory } from 'react-router';
 
 class Homepage extends Component {
 	constructor(props, context) {
@@ -6,6 +8,12 @@ class Homepage extends Component {
 		this.state = {
 			loginUser: ''
 		};
+	}
+	logoutHandler(){
+		this.setState({
+			loginUser: ''
+		})
+		browserHistory.push('/');
 	}
 	componentWillMount(){
 		fetch('/home')
@@ -23,6 +31,7 @@ class Homepage extends Component {
 
 		return (
 			<div>
+				<Logout onLogout={this.logoutHandler.bind(this)} />
 				<h1>Welcome Home {loginUser}</h1>
 			</div>
 		);

@@ -17,9 +17,6 @@ class Nav extends Component {
 						<li>
 							<Link to='/login' activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Login</Link>
 						</li>
-						<li>
-							<Link to='/home' activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Your Page</Link>
-						</li>
 					</ul>
 				</div>
 			</div>
@@ -28,6 +25,3 @@ class Nav extends Component {
 }
 
 export default Nav;
-
-//home onClick make a fetch request home. and then if that response comes back with an actual user, then carry onto home, otherwise go to fucking main.
-//same 
