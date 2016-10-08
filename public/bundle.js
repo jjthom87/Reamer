@@ -25765,8 +25765,24 @@
 		}
 
 		_createClass(Homepage, [{
+			key: 'componentWillMount',
+			value: function componentWillMount() {
+				var _this2 = this;
+
+				fetch('/home').then(function (response) {
+					return response.json();
+				}).then(function (results) {
+					console.log(results);
+					_this2.setState({
+						loginUser: results.currentUser.firstname
+					});
+				});
+			}
+		}, {
 			key: 'render',
 			value: function render() {
+				var loginUser = this.state.loginUser;
+
 
 				return _react2.default.createElement(
 					'div',
@@ -25774,7 +25790,8 @@
 					_react2.default.createElement(
 						'h1',
 						null,
-						'Welcome Home'
+						'Welcome Home ',
+						loginUser
 					)
 				);
 			}
@@ -25833,9 +25850,16 @@
 				};
 				fetch('/users/login', {
 					method: 'post',
-					body: loginUser
+					body: JSON.stringify(loginUser),
+					headers: {
+						'content-type': 'application/json'
+					}
 				}).then(function (results) {
-					_reactRouter.browserHistory.push('/home');
+					if (results.statusText === "OK") {
+						_reactRouter.browserHistory.push('/home');
+					} else {
+						alert('Wrong Login Credentials');
+					}
 				});
 			}
 		}, {

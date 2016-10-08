@@ -11,6 +11,7 @@ var mysql = require('mysql');
 var LocalStrategy = require('passport-local').Strategy;
 var _ = require('underscore');
 var bcrypt = require('bcryptjs');
+var userInfo;
 
 // this is used to sync the data
 var models = require('./models');
@@ -58,20 +59,14 @@ app.use(bodyParser.json())
 // app.use(passport.initialize());
 // app.use(passport.session());
 
-  // app.get('/home', function (req, res){
-  //       console.log(req.body);
-  //       if (!req.isAuthenticated()){
-  //           req.session.error = 'Please sign in!';
-  //           res.redirect('/login');
-  //           return false;
-  //         };
-  //         models.User.findOne({ where: {id: req.user.id}}).then(function(currentUser){
-  //         var data = {
-  //           currentUser: currentUser
-  //         }
-  //         res.json(data);
-  //       });
-  // });
+  app.get('/home', function (req, res){
+          models.User.findOne({ where: {username: userInfo.username}}).then(function(currentUser){
+          var data = {
+            currentUser: currentUser
+          }
+          res.json(data);
+        });
+  });
 
   // app.post('/users/login', 
   //   passport.authenticate('local', {
@@ -84,6 +79,27 @@ app.use(bodyParser.json())
   app.get('/register', function(req, res) {
    	res.render('register'); // uses register.handlebars
   });
+
+app.post('/users/login', function(req,res) {
+  var body = _.pick(req.body, 'username', 'password');
+
+  if(typeof body.username !== 'string' || typeof body.password !== "string") {
+    return res.status(400).send();
+  }
+  models.User.findOne({
+    where: {
+      username: body.username
+    }
+  }).then(function(user){ 
+    if (!user || !bcrypt.compareSync(body.password, user.get('password_hash'))){
+      return res.status(401).send();
+    }
+    userInfo = user;
+    res.json(user);
+  }, function(e){
+    res.status(500).send();
+  })
+});
 
      //Register user
   app.post('/users/create',function(req,res){

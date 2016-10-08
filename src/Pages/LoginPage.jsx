@@ -10,9 +10,16 @@ class LoginPage extends Component {
 		}
 		fetch('/users/login', {
 			method: 'post',
-			body: loginUser
+			body: JSON.stringify(loginUser),
+			headers: {
+				'content-type': 'application/json'
+			}
 		}).then((results) => {
-			browserHistory.push('/home');
+			if (results.statusText === "OK"){
+				browserHistory.push('/home');
+			} else {
+				alert('Wrong Login Credentials');
+			}
 		})
 	}
 	render() {
