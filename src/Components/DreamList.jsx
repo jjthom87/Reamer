@@ -9,22 +9,31 @@ class DreamList extends Component {
 	render() {
 		const { dreams, handleDeleteDream } = this.props;
 
-		const updateDreams = dreams.filter((dream) => !dream.active);
+		var noDreams = () => {
+			if (dreams.length === 0){
+				return (
+					<p className="container__message">You Have Had No Dreams</p>
+				);
+			}
+		}
 
 		return (
-			<ul>
-				{
-					dreams.map((dream, index) =>
-						<Dream
-							title={dream.title}
-							description={dream.description}
-							handleDeleteDream={handleDeleteDream}
-							id={dream.id}
-							key={index}
-						/>
-					)
-				}
-			</ul>
+			<div>
+				<p>
+					{
+						dreams.map((dream, index) =>
+							<Dream
+								title={dream.title}
+								description={dream.description}
+								handleDeleteDream={handleDeleteDream}
+								id={dream.id}
+								key={index}
+							/>
+						)
+					}
+					{noDreams()}
+				</p>
+			</div>
 		);
 	}
 }

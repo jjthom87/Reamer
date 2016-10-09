@@ -30,9 +30,13 @@ class CreateAccountPage extends Component {
 	render() {
 
 		return (
-			<div>
-				<h1>Create Account Here</h1>
-				<CreateAccount onCreate={this.handleNewData.bind(this)}/>
+			<div className = "row">
+				<div className="column small-centered small-11 medium-6 large-5">
+					<div className="container">
+						<h1 className = "container_header text-center">Create Account</h1>
+						<CreateAccount onCreate={this.handleNewData.bind(this)}/>
+					</div>
+				</div>
 			</div>
 		);
 

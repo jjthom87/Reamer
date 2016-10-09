@@ -8,11 +8,11 @@ class Dream extends Component {
 		const { id, title, description, handleDeleteDream } = this.props;
 
 		return (
-			<li>
-				<p>{title}</p>
+			<div className="text-center">
+				<p className="dreamTitle">{title}</p>
 				<p>{description}</p>
-				<button onClick={() => handleDeleteDream(id)}>Delete</button>
-			</li>
+				<button className="button hollow" onClick={() => handleDeleteDream(id)}>Delete</button>
+			</div>
 		);
 	}
 }

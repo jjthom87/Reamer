@@ -36,7 +36,7 @@ class Login extends Component {
 						<input type="password" ref="password" placeholder="Enter Password"/>
 					</div>
 					<div>
-						<input type="submit" />
+						<input className="button expanded hollow" type="submit" />
 					</div>
 				</form>
 			</div>

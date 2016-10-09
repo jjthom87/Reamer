@@ -87,9 +87,16 @@ class Homepage extends Component {
 		return (
 			<div>
 				<Logout onLogout={this.logoutHandler.bind(this)} />
-				<h1>Welcome Home {loginUser}</h1>
+				<h1 className = "text-center">Welcome Home {loginUser}</h1>
 				<AddDream onDreamCreate={this.handleAddDream.bind(this)} />
-				<DreamList dreams={updateDreams} handleDeleteDream={this.handleDeleteDream.bind(this)}/>
+				<h2 className = "text-center">Your Dreams</h2>
+				<div className="row">
+					<div className="column small-centered small-11 medium-6 large-5">
+						<div className="container">
+							<DreamList dreams={updateDreams} handleDeleteDream={this.handleDeleteDream.bind(this)}/>
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 

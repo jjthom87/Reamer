@@ -8,11 +8,12 @@ class Nav extends Component {
 			<div className="top-bar">
 				<div className="top-bar-left">
 					<ul className="menu">
+						<li className="menu-text">Reamer</li>
 						<li>
 							<IndexLink to='/' activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Home</IndexLink>
 						</li>
 						<li>
-							<Link to='/create' activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Create Account Here</Link>
+							<Link to='/create' activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Register</Link>
 						</li>
 						<li>
 							<Link to='/login' activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Login</Link>

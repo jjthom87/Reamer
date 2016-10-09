@@ -27,18 +27,23 @@ class AddDream extends Component {
 	}
 	render() {
 		return (
-			<div>
-				<form onSubmit={this.onCreateDream.bind(this)}>
-					<div>
-						<input type="text" ref="title" placeholder="Dream Title"/>
+			<div className="row">
+				<div className="column small-centered small-11 medium-6 large-5">
+					<div className="container">
+						<form onSubmit={this.onCreateDream.bind(this)}>
+								<h2 className = "text-center">Add Dream</h2>
+							<div>
+								<input type="text" ref="title" placeholder="Dream Title"/>
+							</div>
+							<div>
+								<textarea ref="description" placeholder="Dream Description"></textarea>
+							</div>
+							<div>
+								<input className="button expanded hollow" type="submit" />
+							</div>
+						</form>
 					</div>
-					<div>
-						<textarea ref="description" placeholder="Dream Description"></textarea>
-					</div>
-					<div>
-						<input type="submit" />
-					</div>
-				</form>
+				</div>
 			</div>
 		);
 	}

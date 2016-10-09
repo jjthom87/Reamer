@@ -12,7 +12,7 @@ class Logout extends Component {
 		return (
 			<div>
 				<form onSubmit={this.onFormSubmit.bind(this)}>
-					<button>Logout</button>
+					<button className="button hollow">Logout</button>
 				</form>
 			</div>
 		);

@@ -5,8 +5,9 @@ class Main extends Component {
 	render() {
 
 		return (
-			<div>
-				<h1>Record your dreams</h1>
+			<div className = "text-center">
+				<h1>Reamer</h1>
+				<h2>Where You Record Your Dreams</h2>
 			</div>
 		);
 
