@@ -59,7 +59,13 @@ module.exports = function (sequelize, DataTypes) {
 				var json = this.toJSON();
 				return _.pick(json, 'id', 'firstname', 'lastname', 'email', 'username','createdAt', 'updatedAt');
 			}
-		}
+		},
+		classMethods: {
+      		associate: function(models) {
+       		 // associations can be defined here
+        	 User.hasMany(models.Dream);
+      		}
+    	}
 	});
 	return User;
 };

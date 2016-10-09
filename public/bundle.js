@@ -25446,11 +25446,11 @@
 
 	var _Homepage2 = _interopRequireDefault(_Homepage);
 
-	var _LoginPage = __webpack_require__(227);
+	var _LoginPage = __webpack_require__(231);
 
 	var _LoginPage2 = _interopRequireDefault(_LoginPage);
 
-	var _CreateAccountPage = __webpack_require__(229);
+	var _CreateAccountPage = __webpack_require__(233);
 
 	var _CreateAccountPage2 = _interopRequireDefault(_CreateAccountPage);
 
@@ -25517,30 +25517,6 @@
 		}
 
 		_createClass(Application, [{
-			key: 'handleCreateUser',
-			value: function handleCreateUser(text) {
-				var _this2 = this;
-
-				var items = this.state.items;
-
-				var newItem = {
-					text: text
-				};
-				fetch('/api/todo', {
-					method: 'post',
-					body: JSON.stringify(newItem),
-					headers: {
-						'content-type': 'application/json'
-					}
-				}).then(function (response) {
-					return response.json();
-				}).then(function (results) {
-					_this2.setState({
-						items: items.concat(results)
-					});
-				});
-			}
-		}, {
 			key: 'componentWillMount',
 			value: function componentWillMount() {}
 		}, {
@@ -25730,9 +25706,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Logout = __webpack_require__(231);
+	var _Logout = __webpack_require__(227);
 
 	var _Logout2 = _interopRequireDefault(_Logout);
+
+	var _AddDream = __webpack_require__(228);
+
+	var _AddDream2 = _interopRequireDefault(_AddDream);
+
+	var _DreamList = __webpack_require__(229);
+
+	var _DreamList2 = _interopRequireDefault(_DreamList);
 
 	var _reactRouter = __webpack_require__(159);
 
@@ -25753,12 +25737,69 @@
 			var _this = _possibleConstructorReturn(this, (Homepage.__proto__ || Object.getPrototypeOf(Homepage)).call(this, props, context));
 
 			_this.state = {
-				loginUser: ''
+				loginUser: '',
+				dreams: []
 			};
 			return _this;
 		}
 
 		_createClass(Homepage, [{
+			key: 'handleDeleteDream',
+			value: function handleDeleteDream(id) {
+				var _this2 = this;
+
+				var dreams = this.state.dreams;
+
+				// find the first item in our state which has the ID we're looking for (itemId)
+
+				var dream = dreams.find(function (dream) {
+					return dream.id === id;
+				});
+
+				// if we found an item w/ that id, we toggle its `isCompleted` property
+				if (dream) {
+
+					fetch('/dream/delete/' + dream.id, {
+						method: 'DELETE',
+						body: JSON.stringify(dream),
+						headers: {
+							'content-type': 'application/json'
+						}
+					}).then(function (response) {
+						return response.json();
+					}).then(function (results) {
+						_this2.setState({
+							dreams: dreams
+						});
+					});
+				}
+			}
+		}, {
+			key: 'handleAddDream',
+			value: function handleAddDream(text) {
+				var _this3 = this;
+
+				var dreams = this.state.dreams;
+
+				var newDream = {
+					title: text.title,
+					description: text.description
+				};
+				fetch('/dream/create', {
+					method: 'post',
+					body: JSON.stringify(newDream),
+					headers: {
+						'content-type': 'application/json'
+					}
+				}).then(function (response) {
+					return response.json();
+				}).then(function (results) {
+					_this3.setState({
+						dreams: dreams.concat(results)
+					});
+				});
+			}
+		}, {
 			key: 'logoutHandler',
 			value: function logoutHandler() {
 				this.setState({
@@ -25769,21 +25810,24 @@
 		}, {
 			key: 'componentWillMount',
 			value: function componentWillMount() {
-				var _this2 = this;
+				var _this4 = this;
 
 				fetch('/home').then(function (response) {
 					return response.json();
 				}).then(function (results) {
 					console.log(results);
-					_this2.setState({
-						loginUser: results.currentUser.firstname
+					_this4.setState({
+						loginUser: results.currentUser.firstname,
+						dreams: results.dreams
 					});
 				});
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var loginUser = this.state.loginUser;
+				var _state = this.state;
+				var loginUser = _state.loginUser;
+				var dreams = _state.dreams;
 
 
 				return _react2.default.createElement(
@@ -25795,7 +25839,9 @@
 						null,
 						'Welcome Home ',
 						loginUser
-					)
+					),
+					_react2.default.createElement(_AddDream2.default, { onDreamCreate: this.handleAddDream.bind(this) }),
+					_react2.default.createElement(_DreamList2.default, { dreams: dreams, onDelete: this.handleDeleteDream.bind(this) })
 				);
 			}
 		}]);
@@ -25821,7 +25867,310 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Login = __webpack_require__(228);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Logout = function (_Component) {
+		_inherits(Logout, _Component);
+
+		function Logout() {
+			_classCallCheck(this, Logout);
+
+			return _possibleConstructorReturn(this, (Logout.__proto__ || Object.getPrototypeOf(Logout)).apply(this, arguments));
+		}
+
+		_createClass(Logout, [{
+			key: 'onFormSubmit',
+			value: function onFormSubmit(e) {
+				e.preventDefault();
+
+				var loginUser = this.props.loginUser;
+
+
+				this.props.onLogout(loginUser);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'div',
+					null,
+					_react2.default.createElement(
+						'form',
+						{ onSubmit: this.onFormSubmit.bind(this) },
+						_react2.default.createElement(
+							'button',
+							null,
+							'Logout'
+						)
+					)
+				);
+			}
+		}]);
+
+		return Logout;
+	}(_react.Component);
+
+	exports.default = Logout;
+
+/***/ },
+/* 228 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AddDream = function (_Component) {
+		_inherits(AddDream, _Component);
+
+		function AddDream() {
+			var _ref;
+
+			_classCallCheck(this, AddDream);
+
+			for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+				args[_key] = arguments[_key];
+			}
+
+			var _this = _possibleConstructorReturn(this, (_ref = AddDream.__proto__ || Object.getPrototypeOf(AddDream)).call.apply(_ref, [this].concat(args)));
+
+			_this.state = {};
+			return _this;
+		}
+
+		_createClass(AddDream, [{
+			key: 'onCreateDream',
+			value: function onCreateDream(e) {
+				e.preventDefault();
+
+				var creds = {};
+				var title = this.refs.title.value;
+				var description = this.refs.description.value;
+
+				if (title.length > 0) {
+					this.refs.title.value = '';
+					creds.title = title;
+				}
+
+				if (description.length > 0) {
+					this.refs.description.value = '';
+					creds.description = description;
+				}
+
+				this.props.onDreamCreate(creds);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'div',
+					null,
+					_react2.default.createElement(
+						'form',
+						{ onSubmit: this.onCreateDream.bind(this) },
+						_react2.default.createElement(
+							'div',
+							null,
+							_react2.default.createElement('input', { type: 'text', ref: 'title', placeholder: 'Dream Title' })
+						),
+						_react2.default.createElement(
+							'div',
+							null,
+							_react2.default.createElement('textarea', { ref: 'description', placeholder: 'Dream Description' })
+						),
+						_react2.default.createElement(
+							'div',
+							null,
+							_react2.default.createElement('input', { type: 'submit' })
+						)
+					)
+				);
+			}
+		}]);
+
+		return AddDream;
+	}(_react.Component);
+
+	exports.default = AddDream;
+
+/***/ },
+/* 229 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Dream = __webpack_require__(230);
+
+	var _Dream2 = _interopRequireDefault(_Dream);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// this component is "dumb" as it has no state. really all its responsible
+	// for is iterating over an array of items and rendering TodoItem for each
+	// one
+	var DreamList = function (_Component) {
+		_inherits(DreamList, _Component);
+
+		function DreamList() {
+			_classCallCheck(this, DreamList);
+
+			return _possibleConstructorReturn(this, (DreamList.__proto__ || Object.getPrototypeOf(DreamList)).apply(this, arguments));
+		}
+
+		_createClass(DreamList, [{
+			key: 'render',
+			value: function render() {
+				var _props = this.props;
+				var dreams = _props.dreams;
+				var handleDeleteDream = _props.handleDeleteDream;
+
+
+				return _react2.default.createElement(
+					'ul',
+					null,
+					dreams.map(function (dream, index) {
+						return _react2.default.createElement(_Dream2.default, {
+							title: dream.title,
+							description: dream.description,
+							handleDeleteDream: handleDeleteDream,
+							key: index
+						});
+					})
+				);
+			}
+		}]);
+
+		return DreamList;
+	}(_react.Component);
+
+	exports.default = DreamList;
+
+/***/ },
+/* 230 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _DeleteDream = __webpack_require__(235);
+
+	var _DeleteDream2 = _interopRequireDefault(_DeleteDream);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// another "dumb" component responsible for just rendering the HTML relevant
+	// for ONE todo item
+	var Dream = function (_Component) {
+		_inherits(Dream, _Component);
+
+		function Dream() {
+			_classCallCheck(this, Dream);
+
+			return _possibleConstructorReturn(this, (Dream.__proto__ || Object.getPrototypeOf(Dream)).apply(this, arguments));
+		}
+
+		_createClass(Dream, [{
+			key: 'render',
+			value: function render() {
+				var _props = this.props;
+				var title = _props.title;
+				var description = _props.description;
+				var handleDeleteDream = _props.handleDeleteDream;
+
+
+				return _react2.default.createElement(
+					'li',
+					null,
+					_react2.default.createElement(
+						'p',
+						null,
+						title
+					),
+					_react2.default.createElement(
+						'p',
+						null,
+						description
+					),
+					_react2.default.createElement(_DeleteDream2.default, { onDelete: this.handleDeleteDream.bind(this) })
+				);
+			}
+		}]);
+
+		return Dream;
+	}(_react.Component);
+
+	exports.default = Dream;
+
+/***/ },
+/* 231 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Login = __webpack_require__(232);
 
 	var _Login2 = _interopRequireDefault(_Login);
 
@@ -25887,7 +26236,7 @@
 	exports.default = LoginPage;
 
 /***/ },
-/* 228 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25984,7 +26333,7 @@
 	exports.default = Login;
 
 /***/ },
-/* 229 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25999,7 +26348,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _CreateAccount = __webpack_require__(230);
+	var _CreateAccount = __webpack_require__(234);
 
 	var _CreateAccount2 = _interopRequireDefault(_CreateAccount);
 
@@ -26074,7 +26423,7 @@
 	exports.default = CreateAccountPage;
 
 /***/ },
-/* 230 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26204,7 +26553,7 @@
 	exports.default = CreateAccount;
 
 /***/ },
-/* 231 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26227,48 +26576,47 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Logout = function (_Component) {
-		_inherits(Logout, _Component);
+	// another "dumb" component responsible for just rendering the HTML relevant
+	// for ONE todo item
+	var DeleteDream = function (_Component) {
+		_inherits(DeleteDream, _Component);
 
-		function Logout() {
-			_classCallCheck(this, Logout);
+		function DeleteDream() {
+			_classCallCheck(this, DeleteDream);
 
-			return _possibleConstructorReturn(this, (Logout.__proto__ || Object.getPrototypeOf(Logout)).apply(this, arguments));
+			return _possibleConstructorReturn(this, (DeleteDream.__proto__ || Object.getPrototypeOf(DeleteDream)).apply(this, arguments));
 		}
 
-		_createClass(Logout, [{
+		_createClass(DeleteDream, [{
 			key: 'onFormSubmit',
 			value: function onFormSubmit(e) {
 				e.preventDefault();
 
-				var loginUser = this.props.loginUser;
+				var id = this.props.id;
 
 
-				this.props.onLogout(loginUser);
+				this.props.onDelete(id);
 			}
 		}, {
 			key: 'render',
 			value: function render() {
+
 				return _react2.default.createElement(
-					'div',
-					null,
+					'form',
+					{ onSubmit: this.onFormSubmit.bind(this) },
 					_react2.default.createElement(
-						'form',
-						{ onSubmit: this.onFormSubmit.bind(this) },
-						_react2.default.createElement(
-							'button',
-							null,
-							'Logout'
-						)
+						'button',
+						null,
+						'Delete'
 					)
 				);
 			}
 		}]);
 
-		return Logout;
+		return DeleteDream;
 	}(_react.Component);
 
-	exports.default = Logout;
+	exports.default = DeleteDream;
 
 /***/ }
 /******/ ]);

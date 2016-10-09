@@ -12,24 +12,6 @@ class Application extends Component {
 
 		// set initial state
 	}
-	handleCreateUser(text){
-		const { items } = this.state;
-		const newItem = {
-			text
-		};
-		fetch('/api/todo', {
-			method: 'post',
-			body: JSON.stringify(newItem),
-			headers: {
-				'content-type': 'application/json'
-			}
-		}).then((response) => response.json())
-			.then((results) => {
-			this.setState({
-				items: items.concat(results)
-			});
-		});
-	} 
 	componentWillMount(){
 
 	}

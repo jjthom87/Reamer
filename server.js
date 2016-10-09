@@ -60,12 +60,20 @@ app.use(bodyParser.json())
 // app.use(passport.session());
 
   app.get('/home', function (req, res){
-          models.User.findOne({ where: {username: userInfo.username}}).then(function(currentUser){
+        models.User.findOne({ where: {username: userInfo.username}}).then(function(currentUser){
+          currentUser.getDreams().then(function(dreams){
+            var enteredDreams = [];
+
+            dreams.forEach(function(dream){
+              enteredDreams.push(dream);
+            })
           var data = {
-            currentUser: currentUser
+            currentUser: currentUser,
+            dreams: enteredDreams
           }
           res.json(data);
         });
+     });
   });
 
   // app.post('/users/login', 
@@ -115,6 +123,37 @@ app.post('/users/login', function(req,res) {
         res.json(err);
       });
   });
+
+  app.post('/dream/create', function(req, res){
+    models.User.findOne({where: {username: userInfo.username}}).then(function(){
+        models.Dream.create({
+            title: req.body.title,
+            description: req.body.description
+        }).then(function(dream){
+        userInfo.addDream(dream).then(function(success){
+        res.json(dream);
+      }).catch(function(err){
+        throw err;
+      });
+    })
+  })
+});
+
+app.delete('/dream/delete/:id', function(req, res){
+  models.User.findOne({where: {username: userInfo.username}}).then(function(){
+    models.Dream.destroy({
+      where: {
+        id: req.params.id
+      }
+    }).then(function(success){
+      res.json(success)
+    }).catch(function(err){
+      throw err;
+    })
+  })
+})
+
+
 
 
  app.get('/logout', function(req, res){
