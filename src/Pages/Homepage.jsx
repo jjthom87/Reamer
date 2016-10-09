@@ -31,8 +31,9 @@ class Homepage extends Component {
 			.then((results) => {
 				for(var i = 0; i < updateDreams.length; i++){
 					if (updateDreams[i].id === dream.id){
+						dreams.splice(updateDreams[i], 1)
 						this.setState({
-							dreams: delete updateDreams[i]
+							dreams: dreams
 						});
 					}
 				}
