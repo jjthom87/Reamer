@@ -9,6 +9,8 @@ class DreamList extends Component {
 	render() {
 		const { dreams, handleDeleteDream } = this.props;
 
+		const updateDreams = dreams.filter((dream) => !dream.active);
+
 		return (
 			<ul>
 				{

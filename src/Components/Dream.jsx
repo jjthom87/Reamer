@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import DeleteDream from './DeleteDream';
 
 // another "dumb" component responsible for just rendering the HTML relevant
 // for ONE todo item

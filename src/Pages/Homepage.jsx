@@ -18,22 +18,25 @@ class Homepage extends Component {
 		// find the first item in our state which has the ID we're looking for (itemId)
 		const dream = dreams.find((dream) => dream.id === id);
 
-		// if we found an item w/ that id, we toggle its `isCompleted` property
-		if (dream) {
+		const updateDreams = dreams.filter((dream) => !dream.active);
 
+		// if we found an item w/ that id, we toggle its `isCompleted` property
 			fetch(`/dream/delete/${dream.id}`,{
-				method: 'DELETE',
+				method: 'PUT',
 				body: JSON.stringify(dream),
 				headers: {
 					'content-type': 'application/json'
 				}
 			}).then((response) => response.json())
 			.then((results) => {
-				this.setState({
-					dreams: dreams
-				});
+				for(var i = 0; i < updateDreams.length; i++){
+					if (updateDreams[i].id === dream.id){
+						this.setState({
+							dreams: delete updateDreams[i]
+						});
+					}
+				}
 			});	
-		}
 	}
 	handleAddDream(text){
 		const { dreams } = this.state;
@@ -61,13 +64,16 @@ class Homepage extends Component {
 		browserHistory.push('/');
 	}
 	componentWillMount(){
+
 		fetch('/home')
 			.then((response) => response.json())
 				.then((results) => {
-				console.log(results);
+
+				const filtered = results.dreams.filter((dream) => !dream.active);
+
 				this.setState({
 					loginUser: results.currentUser.firstname,
-					dreams: results.dreams
+					dreams: filtered
 				});
 			});
 	}
@@ -75,12 +81,14 @@ class Homepage extends Component {
 
 		var { loginUser, dreams } = this.state;
 
+		const updateDreams = dreams.filter((dream) => !dream.active);
+
 		return (
 			<div>
 				<Logout onLogout={this.logoutHandler.bind(this)} />
 				<h1>Welcome Home {loginUser}</h1>
 				<AddDream onDreamCreate={this.handleAddDream.bind(this)} />
-				<DreamList dreams={dreams} handleDeleteDream={this.handleDeleteDream.bind(this)}/>
+				<DreamList dreams={updateDreams} handleDeleteDream={this.handleDeleteDream.bind(this)}/>
 			</div>
 		);
 

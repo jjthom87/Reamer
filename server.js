@@ -128,7 +128,8 @@ app.post('/users/login', function(req,res) {
     models.User.findOne({where: {username: userInfo.username}}).then(function(){
         models.Dream.create({
             title: req.body.title,
-            description: req.body.description
+            description: req.body.description,
+            active: false
         }).then(function(dream){
         userInfo.addDream(dream).then(function(success){
         res.json(dream);
@@ -139,14 +140,18 @@ app.post('/users/login', function(req,res) {
   })
 });
 
-app.delete('/dream/delete/:id', function(req, res){
+app.put('/dream/delete/:id', function(req, res){
   models.User.findOne({where: {username: userInfo.username}}).then(function(){
-    models.Dream.destroy({
-      where: {
+    models.Dream.update(
+    {
+      active: true
+    },
+    {
+    where: {
         id: req.params.id
       }
     }).then(function(success){
-      res.json(success)
+      res.json(success);
     }).catch(function(err){
       throw err;
     })

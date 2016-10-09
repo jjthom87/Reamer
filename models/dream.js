@@ -8,7 +8,10 @@ module.exports = function(sequelize, DataTypes) {
 		description: {
 			type: DataTypes.TEXT,
 			allowNull: false,
-		}
+		},
+    active: {
+      type: DataTypes.BOOLEAN
+    }
   }, {
     classMethods: {
       associate: function(models) {

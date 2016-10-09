@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "reamer4_db",
+    "database": "reamer5_db",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
