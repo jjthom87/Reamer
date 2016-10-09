@@ -3,19 +3,21 @@ import React, { Component } from 'react';
 // another "dumb" component responsible for just rendering the HTML relevant
 // for ONE todo item
 class DeleteDream extends Component {
-	onFormSubmit(e){
-		e.preventDefault();
+	// onFormSubmit(e){
+	// 	e.preventDefault();
 
-		var { id } = this.props;
+	// 	var { id } = this.props;
 
-		this.props.onDelete(id);
-	}
+	// 	this.props.onDeleteDream(id);
+	// }
 	render() {
 
 		return (
-			<form onSubmit={this.onFormSubmit.bind(this)}>
-				<button>Delete</button>
-			</form>
+			<div>
+				<form>
+					<button onClick={this.props.onClick}>Delete</button>
+				</form>
+			</div>
 		);
 	}
 }

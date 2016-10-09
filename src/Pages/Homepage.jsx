@@ -18,7 +18,6 @@ class Homepage extends Component {
 		// find the first item in our state which has the ID we're looking for (itemId)
 		const dream = dreams.find((dream) => dream.id === id);
 
-
 		// if we found an item w/ that id, we toggle its `isCompleted` property
 		if (dream) {
 
@@ -81,7 +80,7 @@ class Homepage extends Component {
 				<Logout onLogout={this.logoutHandler.bind(this)} />
 				<h1>Welcome Home {loginUser}</h1>
 				<AddDream onDreamCreate={this.handleAddDream.bind(this)} />
-				<DreamList dreams={dreams} onDelete={this.handleDeleteDream.bind(this)}/>
+				<DreamList dreams={dreams} handleDeleteDream={this.handleDeleteDream.bind(this)}/>
 			</div>
 		);
 

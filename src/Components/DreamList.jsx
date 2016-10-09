@@ -17,6 +17,7 @@ class DreamList extends Component {
 							title={dream.title}
 							description={dream.description}
 							handleDeleteDream={handleDeleteDream}
+							id={dream.id}
 							key={index}
 						/>
 					)

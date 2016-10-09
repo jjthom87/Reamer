@@ -25841,7 +25841,7 @@
 						loginUser
 					),
 					_react2.default.createElement(_AddDream2.default, { onDreamCreate: this.handleAddDream.bind(this) }),
-					_react2.default.createElement(_DreamList2.default, { dreams: dreams, onDelete: this.handleDeleteDream.bind(this) })
+					_react2.default.createElement(_DreamList2.default, { dreams: dreams, handleDeleteDream: this.handleDeleteDream.bind(this) })
 				);
 			}
 		}]);
@@ -26071,6 +26071,7 @@
 							title: dream.title,
 							description: dream.description,
 							handleDeleteDream: handleDeleteDream,
+							id: dream.id,
 							key: index
 						});
 					})
@@ -26126,6 +26127,7 @@
 			key: 'render',
 			value: function render() {
 				var _props = this.props;
+				var id = _props.id;
 				var title = _props.title;
 				var description = _props.description;
 				var handleDeleteDream = _props.handleDeleteDream;
@@ -26144,7 +26146,13 @@
 						null,
 						description
 					),
-					_react2.default.createElement(_DeleteDream2.default, { onDelete: this.handleDeleteDream.bind(this) })
+					_react2.default.createElement(
+						'button',
+						{ onClick: function onClick() {
+								return handleDeleteDream(id);
+							} },
+						'Delete'
+					)
 				);
 			}
 		}]);
@@ -26588,26 +26596,28 @@
 		}
 
 		_createClass(DeleteDream, [{
-			key: 'onFormSubmit',
-			value: function onFormSubmit(e) {
-				e.preventDefault();
-
-				var id = this.props.id;
-
-
-				this.props.onDelete(id);
-			}
-		}, {
 			key: 'render',
+
+			// onFormSubmit(e){
+			// 	e.preventDefault();
+
+			// 	var { id } = this.props;
+
+			// 	this.props.onDeleteDream(id);
+			// }
 			value: function render() {
 
 				return _react2.default.createElement(
-					'form',
-					{ onSubmit: this.onFormSubmit.bind(this) },
+					'div',
+					null,
 					_react2.default.createElement(
-						'button',
+						'form',
 						null,
-						'Delete'
+						_react2.default.createElement(
+							'button',
+							{ onClick: this.props.onClick },
+							'Delete'
+						)
 					)
 				);
 			}

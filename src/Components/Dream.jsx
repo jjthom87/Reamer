@@ -6,13 +6,13 @@ import DeleteDream from './DeleteDream';
 class Dream extends Component {
 
 	render() {
-		const { title, description, handleDeleteDream } = this.props;
+		const { id, title, description, handleDeleteDream } = this.props;
 
 		return (
 			<li>
 				<p>{title}</p>
 				<p>{description}</p>
-				<DeleteDream onDelete={this.handleDeleteDream.bind(this)}/>
+				<button onClick={() => handleDeleteDream(id)}>Delete</button>
 			</li>
 		);
 	}
