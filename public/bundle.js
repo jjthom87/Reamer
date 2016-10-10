@@ -26180,7 +26180,7 @@
 				var handleDeleteDream = _props.handleDeleteDream;
 	
 	
-				var noDreams = function noDreams() {
+				var renderDreams = function renderDreams() {
 					if (dreams.length === 0) {
 						return _react2.default.createElement(
 							'p',
@@ -26188,25 +26188,21 @@
 							'You Have Had No Dreams'
 						);
 					}
+					return dreams.map(function (dream, index) {
+						return _react2.default.createElement(_Dream2.default, {
+							title: dream.title,
+							description: dream.description,
+							handleDeleteDream: handleDeleteDream,
+							id: dream.id,
+							key: index
+						});
+					});
 				};
 	
 				return _react2.default.createElement(
 					'div',
 					null,
-					_react2.default.createElement(
-						'p',
-						null,
-						dreams.map(function (dream, index) {
-							return _react2.default.createElement(_Dream2.default, {
-								title: dream.title,
-								description: dream.description,
-								handleDeleteDream: handleDeleteDream,
-								id: dream.id,
-								key: index
-							});
-						}),
-						noDreams()
-					)
+					renderDreams()
 				);
 			}
 		}]);
