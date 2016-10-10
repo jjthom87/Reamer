@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { Router , browserHistory } from 'react-router';
-
-var moment = require('moment');
-
 import Logout from '../Components/Logout';
 import AddDream from '../Components/AddDream';
 import DreamList from '../Components/DreamList';
+
+var moment = require('moment');
 
 class Homepage extends Component {
 	constructor(props, context) {
 		super(props, context);
 		this.state = {
 			loginUser: '',
-			dreams: []
+			dreams: [],
+			createdOn: ''
 		};
 	}
 	handleDeleteDream(id){
@@ -47,7 +47,6 @@ class Homepage extends Component {
 		const newDream = {
 			title: text.title,
 			description: text.description,
-			createdAt: moment().unix()
 		};
 		fetch('/dream/create', {
 			method: 'post',
@@ -58,7 +57,8 @@ class Homepage extends Component {
 		}).then((response) => response.json())
 			.then((results) => {
 			this.setState({
-				dreams: dreams.concat(results)
+				dreams: dreams.concat(results),
+				createdOn: moment()
 			});
 		});
 	} 

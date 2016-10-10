@@ -6,14 +6,14 @@ var moment = require('moment');
 class Dream extends Component {
 
 	render() {
-		const { id, title, description, createdAt, handleDeleteDream } = this.props;
+		const { id, title, description, createdOn, handleDeleteDream } = this.props;
 
 		var renderDate = () =>  {
-			var message = "Added on "
-			var timestamp = createdAt
+			var message = "Added on ";
+			var timestamp = createdOn;
 
-			return message + moment.unix(timestamp).format('MMM Do YYYY @ h:mm a')
-		}
+			return message + moment(timestamp).format('MMM Do YYYY @ h:mm a')
+		};
 
 		return (
 			<div className="text-center">
