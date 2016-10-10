@@ -39,7 +39,7 @@ class AddDream extends Component {
 								<textarea ref="description" placeholder="Dream Description"></textarea>
 							</div>
 							<div>
-								<input className="button expanded hollow" type="submit" />
+								<input className="button expanded hollow" type="submit" placeholder="Add Dream" />
 							</div>
 						</form>
 					</div>

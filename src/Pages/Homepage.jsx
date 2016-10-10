@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import { Router , browserHistory } from 'react-router';
+
+var moment = require('moment');
+
 import Logout from '../Components/Logout';
 import AddDream from '../Components/AddDream';
 import DreamList from '../Components/DreamList';
-import { Router , browserHistory } from 'react-router';
 
 class Homepage extends Component {
 	constructor(props, context) {
@@ -43,7 +46,8 @@ class Homepage extends Component {
 		const { dreams } = this.state;
 		const newDream = {
 			title: text.title,
-			description: text.description
+			description: text.description,
+			createdAt: moment().unix()
 		};
 		fetch('/dream/create', {
 			method: 'post',
