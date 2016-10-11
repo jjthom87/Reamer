@@ -28,8 +28,11 @@ class Homepage extends Component {
 				method: 'PUT',
 				body: JSON.stringify(dream),
 				headers: {
-					'content-type': 'application/json'
-				}
+				'Authorization': 'Basic'+btoa('username:password'),
+				'content-type': 'application/json',
+				'accept': 'application/json'
+				},
+				credentials: 'include'
 			}).then((response) => response.json())
 			.then((results) => {
 				for(var i = 0; i < updateDreams.length; i++){
@@ -52,8 +55,11 @@ class Homepage extends Component {
 			method: 'post',
 			body: JSON.stringify(newDream),
 			headers: {
-				'content-type': 'application/json'
-			}
+				'Authorization': 'Basic'+btoa('username:password'),
+				'content-type': 'application/json',
+				'accept': 'application/json'
+			},
+			credentials: 'include'
 		}).then((response) => response.json())
 			.then((results) => {
 			this.setState({
@@ -74,9 +80,14 @@ class Homepage extends Component {
 		// browserHistory.push('/');
 	}
 	componentWillMount(){
-
-		fetch('/home')
-			.then((response) => response.json())
+		fetch('/home', {
+			headers: {
+				'Authorization': 'Basic'+btoa('username:password'),
+				'content-type': 'application/json',
+				'accept': 'application/json'
+			},
+			credentials: 'include'
+		}).then((response) => response.json())
 				.then((results) => {
 
 				const filtered = results.dreams.filter((dream) => !dream.active);

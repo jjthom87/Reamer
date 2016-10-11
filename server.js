@@ -136,7 +136,7 @@ app.delete('/users/login', middleware.requireAuthentication, function (req, res)
 });
 
      //Register user
-  app.post('/users/create',function(req,res){
+  app.post('/users/create', function(req,res){
       models.User.create({
         firstname: req.body.firstname,
         lastname: req.body.lastname,
@@ -150,7 +150,7 @@ app.delete('/users/login', middleware.requireAuthentication, function (req, res)
       });
   });
 
-  app.post('/dream/create', function(req, res){
+  app.post('/dream/create', middleware.requireAuthentication, function(req, res){
     models.User.findOne({where: {username: userInfo.username}}).then(function(){
         models.Dream.create({
             title: req.body.title,
@@ -166,7 +166,7 @@ app.delete('/users/login', middleware.requireAuthentication, function (req, res)
   })
 });
 
-app.put('/dream/delete/:id', function(req, res){
+app.put('/dream/delete/:id', middleware.requireAuthentication, function(req, res){
   models.User.findOne({where: {username: userInfo.username}}).then(function(){
     models.Dream.update(
     {

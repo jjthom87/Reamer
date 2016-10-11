@@ -25819,8 +25819,11 @@
 					method: 'PUT',
 					body: JSON.stringify(dream),
 					headers: {
-						'content-type': 'application/json'
-					}
+						'Authorization': 'Basic' + btoa('username:password'),
+						'content-type': 'application/json',
+						'accept': 'application/json'
+					},
+					credentials: 'include'
 				}).then(function (response) {
 					return response.json();
 				}).then(function (results) {
@@ -25849,8 +25852,11 @@
 					method: 'post',
 					body: JSON.stringify(newDream),
 					headers: {
-						'content-type': 'application/json'
-					}
+						'Authorization': 'Basic' + btoa('username:password'),
+						'content-type': 'application/json',
+						'accept': 'application/json'
+					},
+					credentials: 'include'
 				}).then(function (response) {
 					return response.json();
 				}).then(function (results) {
@@ -25878,7 +25884,14 @@
 			value: function componentWillMount() {
 				var _this4 = this;
 	
-				fetch('/home').then(function (response) {
+				fetch('/home', {
+					headers: {
+						'Authorization': 'Basic' + btoa('username:password'),
+						'content-type': 'application/json',
+						'accept': 'application/json'
+					},
+					credentials: 'include'
+				}).then(function (response) {
 					return response.json();
 				}).then(function (results) {
 	
