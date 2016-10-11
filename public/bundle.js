@@ -25863,10 +25863,15 @@
 		}, {
 			key: 'logoutHandler',
 			value: function logoutHandler() {
-				this.setState({
-					loginUser: ''
+				fetch('/users/login', {
+					method: 'delete'
+				}).then(function (results) {
+					_reactRouter.browserHistory.push('/');
 				});
-				_reactRouter.browserHistory.push('/');
+				// this.setState({
+				// 	loginUser: ''
+				// })
+				// browserHistory.push('/');
 			}
 		}, {
 			key: 'componentWillMount',
@@ -40752,13 +40757,18 @@
 					method: 'post',
 					body: JSON.stringify(loginUser),
 					headers: {
-						'content-type': 'application/json'
-					}
+						'Authorization': 'Basic' + btoa('username:password'),
+						'content-type': 'application/json',
+						'accept': 'application/json'
+					},
+					credentials: 'include'
+				}).then(function (response) {
+					return response.json();
 				}).then(function (results) {
-					if (results.statusText === "OK") {
+					if (results) {
 						_reactRouter.browserHistory.push('/home');
 					} else {
-						alert('Wrong Login Credentials');
+						alert('Incorrect Login Credentials');
 					}
 				});
 			}
@@ -40946,7 +40956,6 @@
 				}).then(function (response) {
 					return response.json();
 				}).then(function (results) {
-					console.log(results);
 					if (results.createdAt) {
 						_reactRouter.browserHistory.push('/login');
 					} else {

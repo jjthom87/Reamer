@@ -63,10 +63,15 @@ class Homepage extends Component {
 		});
 	} 
 	logoutHandler(){
-		this.setState({
-			loginUser: ''
-		})
-		browserHistory.push('/');
+		fetch('/users/login', {
+			method: 'delete'
+		}).then((results) => {
+			browserHistory.push('/');
+		});
+		// this.setState({
+		// 	loginUser: ''
+		// })
+		// browserHistory.push('/');
 	}
 	componentWillMount(){
 

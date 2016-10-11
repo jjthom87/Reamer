@@ -12,13 +12,17 @@ class LoginPage extends Component {
 			method: 'post',
 			body: JSON.stringify(loginUser),
 			headers: {
-				'content-type': 'application/json'
-			}
-		}).then((results) => {
-			if (results.statusText === "OK"){
+				'Authorization': 'Basic'+btoa('username:password'),
+				'content-type': 'application/json',
+				'accept': 'application/json'
+			},
+			credentials: 'include'
+		}).then((response) => response.json())
+		.then((results) => {
+			if (results){
 				browserHistory.push('/home');
 			} else {
-				alert('Wrong Login Credentials');
+				alert('Incorrect Login Credentials');
 			}
 		})
 	}

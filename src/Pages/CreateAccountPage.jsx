@@ -19,7 +19,6 @@ class CreateAccountPage extends Component {
 			}
 		}).then((response) => response.json())
 		.then((results) => {
-			console.log(results);
 			if (results.createdAt){
 				browserHistory.push('/login');
 			} else {
