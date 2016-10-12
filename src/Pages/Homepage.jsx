@@ -3,6 +3,7 @@ import { Router , browserHistory } from 'react-router';
 import Logout from '../Components/Logout';
 import AddDream from '../Components/AddDream';
 import DreamList from '../Components/DreamList';
+var _ = require('lodash');
 
 var moment = require('moment');
 
@@ -19,15 +20,11 @@ class Homepage extends Component {
 	handleDeleteDream(id){
 		const { dreams } = this.state;
 
-		// find the first item in our state which has the ID we're looking for (itemId)
-		const dream = dreams.find((dream) => dream.id === id);
+		const deleteDream = _.remove(dreams, dream => dream.id === id);
 
-		const updateDreams = dreams.filter((dream) => !dream.active);
-
-		// if we found an item w/ that id, we toggle its `isCompleted` property
-		fetch(`/dream/delete/${dream.id}`,{
-			method: 'PUT',
-			body: JSON.stringify(dream),
+		fetch(`/dream/delete/${deleteDream[0].id}`,{
+			method: 'DELETE',
+			body: JSON.stringify(deleteDream),
 			headers: {
 				Auth: localStorage.getItem('token'),
 				'content-type': 'application/json',
@@ -36,14 +33,9 @@ class Homepage extends Component {
 			credentials: 'include'
 		}).then((response) => response.json())
 		.then((results) => {
-			for(var i = 0; i < updateDreams.length; i++){
-				if (updateDreams[i].id === dream.id){
-					dreams.splice(updateDreams[i], 1)
-					this.setState({
-						dreams: dreams
-					});
-				}
-			}
+			this.setState({
+				dreams: dreams
+			})
 		});	
 	}
 	handleAddDream(text){

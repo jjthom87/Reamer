@@ -22,42 +22,8 @@ db.sync();
 var app = express();
 app.use(express.static('public'));
 
-// passport.serializeUser(function(user,done){
-//   done(null, user);
-//  });
-
-// passport.deserializeUser(function(obj,done){
-//   done(null, obj);
-//  });
-
-// module.exports = 
-// passport.use('local', new LocalStrategy(
-//   function(username, password, done){
-//     models.User.findOne({ where: {username: username}}).then(function(user){
-//         if (!user){
-//           return done(null, false, {message: 'Incorrect Username'});
-//         }
-//         if (!bcrypt.compareSync(password, user.get('password_hash'))){
-//           return done(null, false, {message: 'incorrect password'});
-//         }
-//         return done(null, user)
-//       });
-//     }
-// ));
-
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-// app.use(cookieParser())
-// app.use(session({
-//  secret: 'jobtroll is the ticket to success',
-//   store: new SequelizeStore({
-//    db: db
-//  }),
-//  resave: true,
-//  saveUninitialized: true
-// }));
-// app.use(passport.initialize());
-// app.use(passport.session());
 
 app.get('/home', middleware.requireAuthentication, function (req, res){
       models.User.findOne({ where: {id: req.user.get('id')}}).then(function(currentUser){
@@ -102,7 +68,6 @@ app.delete('/users/login', middleware.requireAuthentication, function (req, res)
   });
 });
 
-
 app.post('/users/create', function(req,res){
     models.User.create({
       firstname: req.body.firstname,
@@ -117,7 +82,7 @@ app.post('/users/create', function(req,res){
     });
 });
 
-  app.post('/dream/create', middleware.requireAuthentication, function(req, res){
+app.post('/dream/create', middleware.requireAuthentication, function(req, res){
         models.Dream.create({
             title: req.body.title,
             description: req.body.description,
@@ -131,16 +96,9 @@ app.post('/users/create', function(req,res){
     })
 });
 
-app.put('/dream/delete/:id', middleware.requireAuthentication, function(req, res){
+app.delete('/dream/delete/:id', middleware.requireAuthentication, function(req, res){
   models.User.findOne({where: {id: req.user.get('id')}}).then(function(){
-    models.Dream.update(
-    {
-      active: true
-    },
-    {
-    where: {
-        id: req.params.id
-      }
+    models.Dream.destroy({ where: { id: req.params.id }
     }).then(function(success){
       res.json(success);
     }).catch(function(err){
