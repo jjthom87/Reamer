@@ -12,7 +12,8 @@ class Homepage extends Component {
 		this.state = {
 			loginUser: '',
 			dreams: [],
-			createdOn: ''
+			createdOn: '',
+			clientToken: ''
 		};
 	}
 	handleDeleteDream(id){
@@ -24,26 +25,26 @@ class Homepage extends Component {
 		const updateDreams = dreams.filter((dream) => !dream.active);
 
 		// if we found an item w/ that id, we toggle its `isCompleted` property
-			fetch(`/dream/delete/${dream.id}`,{
-				method: 'PUT',
-				body: JSON.stringify(dream),
-				headers: {
-				'Authorization': 'Basic'+btoa('username:password'),
+		fetch(`/dream/delete/${dream.id}`,{
+			method: 'PUT',
+			body: JSON.stringify(dream),
+			headers: {
+				Auth: localStorage.getItem('token'),
 				'content-type': 'application/json',
 				'accept': 'application/json'
-				},
-				credentials: 'include'
-			}).then((response) => response.json())
-			.then((results) => {
-				for(var i = 0; i < updateDreams.length; i++){
-					if (updateDreams[i].id === dream.id){
-						dreams.splice(updateDreams[i], 1)
-						this.setState({
-							dreams: dreams
-						});
-					}
+			},
+			credentials: 'include'
+		}).then((response) => response.json())
+		.then((results) => {
+			for(var i = 0; i < updateDreams.length; i++){
+				if (updateDreams[i].id === dream.id){
+					dreams.splice(updateDreams[i], 1)
+					this.setState({
+						dreams: dreams
+					});
 				}
-			});	
+			}
+		});	
 	}
 	handleAddDream(text){
 		const { dreams } = this.state;
@@ -55,7 +56,7 @@ class Homepage extends Component {
 			method: 'post',
 			body: JSON.stringify(newDream),
 			headers: {
-				'Authorization': 'Basic'+btoa('username:password'),
+				Auth: localStorage.getItem('token'),
 				'content-type': 'application/json',
 				'accept': 'application/json'
 			},
@@ -70,26 +71,26 @@ class Homepage extends Component {
 	} 
 	logoutHandler(){
 		fetch('/users/login', {
-			method: 'delete'
+			method: 'delete',
+			headers: {
+				Auth: localStorage.getItem('token'),
+			},
+			credentials: 'include'
 		}).then((results) => {
 			browserHistory.push('/');
 		});
-		// this.setState({
-		// 	loginUser: ''
-		// })
-		// browserHistory.push('/');
 	}
 	componentWillMount(){
-		fetch('/home', {
-			headers: {
-				'Authorization': 'Basic'+btoa('username:password'),
-				'content-type': 'application/json',
-				'accept': 'application/json'
-			},
-			credentials: 'include'
-		}).then((response) => response.json())
-				.then((results) => {
+		const { clientToken } = this.props;
 
+		fetch('/home', {
+			credentials: 'include',
+			headers: {
+				Auth: localStorage.getItem('token')
+			}
+		}).then((response) => response.json())
+		.then((results) => {
+				console.log(results);
 				const filtered = results.dreams.filter((dream) => !dream.active);
 
 				this.setState({

@@ -3,7 +3,14 @@ import Login from '../Components/Login';
 import { Router , browserHistory } from 'react-router';
 
 class LoginPage extends Component {
+	constructor(...args){
+		super(...args)
+		this.state = {
+			clientToken: ''
+		}
+	}
 	handleNewData (creds) {
+
 		const loginUser = {
 			username: creds.username,
 			password: creds.password
@@ -17,16 +24,18 @@ class LoginPage extends Component {
 				'accept': 'application/json'
 			},
 			credentials: 'include'
-		}).then((response) => response.json())
-		.then((results) => {
-			if (results){
+		}).then((response) => {
+			if (response.statusText === "OK"){
+				localStorage.setItem('token', response.headers.get('Auth'));
 				browserHistory.push('/home');
+				response.json();
 			} else {
-				alert('Incorrect Login Credentials');
+				alert ('Incorrect Login Credentials');
 			}
 		})
 	}
 	render() {
+
 		return (
 			<div className="row">
 				<div className="column small-centered small-11 medium-6 large-5">
