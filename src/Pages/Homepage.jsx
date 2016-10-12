@@ -90,14 +90,12 @@ class Homepage extends Component {
 			}
 		}).then((response) => response.json())
 		.then((results) => {
-				console.log(results);
-				const filtered = results.dreams.filter((dream) => !dream.active);
-
-				this.setState({
-					loginUser: results.currentUser.firstname,
-					dreams: filtered
-				});
+			const filtered = results.dreams.filter((dream) => !dream.active);
+			this.setState({
+				loginUser: results.currentUser.firstname,
+				dreams: filtered
 			});
+		});
 	}
 	render() {
 
@@ -108,7 +106,7 @@ class Homepage extends Component {
 		return (
 			<div>
 				<Logout onLogout={this.logoutHandler.bind(this)} />
-				<h1 className = "text-center">Welcome Home {loginUser}</h1>
+				<h1 className = "text-center">Welcome Home </h1><h1 className="userName text-center">{loginUser}</h1>
 				<AddDream onDreamCreate={this.handleAddDream.bind(this)} />
 				<h2 className = "text-center">Your Dreams</h2>
 				<div className="row">

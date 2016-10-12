@@ -12,7 +12,6 @@ var LocalStrategy = require('passport-local').Strategy;
 var _ = require('underscore');
 var bcrypt = require('bcryptjs');
 var middleware = require('./middleware.js')(db);
-var userInfo;
 
 // this is used to sync the data
 var models = require('./models');
@@ -60,58 +59,26 @@ app.use(bodyParser.json())
 // app.use(passport.initialize());
 // app.use(passport.session());
 
-  app.get('/home', middleware.requireAuthentication, function (req, res){
-        models.User.findOne({ where: {username: userInfo.username}}).then(function(currentUser){
-          currentUser.getDreams().then(function(dreams){
-            var enteredDreams = [];
+app.get('/home', middleware.requireAuthentication, function (req, res){
+      models.User.findOne({ where: {id: req.user.get('id')}}).then(function(currentUser){
+        currentUser.getDreams().then(function(dreams){
+          var enteredDreams = [];
 
-            dreams.forEach(function(dream){
-              enteredDreams.push(dream);
-            })
-          var data = {
-            currentUser: currentUser,
-            dreams: enteredDreams
-          }
-          res.json(data);
-        });
-     });
-  });
-
-  // app.post('/users/login', 
-  //   passport.authenticate('local', {
-  //     successRedirect: '/home',
-	 //    failureRedirect: '/'
-  //   })
-  // );
-
-// ----- Registration GET Request ------ //
-  app.get('/register', function(req, res) {
-   	res.render('register'); // uses register.handlebars
-  });
-
-// app.post('/users/login', function(req,res) {
-//   var body = _.pick(req.body, 'username', 'password');
-
-//   if(typeof body.username !== 'string' || typeof body.password !== "string") {
-//     return res.status(400).send();
-//   }
-//   models.User.findOne({
-//     where: {
-//       username: body.username
-//     }
-//   }).then(function(user){ 
-//     if (!user || !bcrypt.compareSync(body.password, user.get('password_hash'))){
-//       return res.status(401).send();
-//     }
-//     userInfo = user;
-//     res.json(user);
-//   }, function(e){
-//     res.status(500).send();
-//   })
-// });
+          dreams.forEach(function(dream){
+            enteredDreams.push(dream);
+          })
+        var data = {
+          currentUser: currentUser,
+          dreams: enteredDreams
+        }
+        res.json(data);
+      });
+   });
+});
 
 app.post('/users/login', function (req, res) {
   var body = _.pick(req.body, 'username', 'password');
+  var userInfo;
 
   models.User.authenticate(body).then(function (user) {
     var token = user.generateToken('authentication');
@@ -135,39 +102,37 @@ app.delete('/users/login', middleware.requireAuthentication, function (req, res)
   });
 });
 
-     //Register user
-  app.post('/users/create', function(req,res){
-      models.User.create({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
-      }).then(function(success) {
-        res.json(success);
-      }).catch(function(err){
-        res.json(err);
-      });
-  });
+
+app.post('/users/create', function(req,res){
+    models.User.create({
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    }).then(function(success) {
+      res.json(success);
+    }).catch(function(err){
+      res.json(err);
+    });
+});
 
   app.post('/dream/create', middleware.requireAuthentication, function(req, res){
-    models.User.findOne({where: {username: userInfo.username}}).then(function(){
         models.Dream.create({
             title: req.body.title,
             description: req.body.description,
             active: false
         }).then(function(dream){
-        userInfo.addDream(dream).then(function(success){
+        req.user.addDream(dream).then(function(success){
         res.json(dream);
       }).catch(function(err){
         throw err;
       });
     })
-  })
 });
 
 app.put('/dream/delete/:id', middleware.requireAuthentication, function(req, res){
-  models.User.findOne({where: {username: userInfo.username}}).then(function(){
+  models.User.findOne({where: {id: req.user.get('id')}}).then(function(){
     models.Dream.update(
     {
       active: true
@@ -183,15 +148,6 @@ app.put('/dream/delete/:id', middleware.requireAuthentication, function(req, res
     })
   })
 })
-
-
-
-
- // app.get('/logout', function(req, res){
- //  req.logout();
- //  req.session.destroy();
- //  res.redirect('/');
- // });
 
 var PORT = process.env.PORT || 8000;
 
