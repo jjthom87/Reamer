@@ -9,6 +9,7 @@ import Main from './Pages/Main';
 import Homepage from './Pages/Homepage';
 import LoginPage from './Pages/LoginPage';
 import CreateAccountPage from './Pages/CreateAccountPage';
+import AllDreams from './Pages/AllDreams'
 
 export default (
 	/* This means the Application component 
@@ -17,6 +18,7 @@ export default (
 		<Route component={Application}>
 			<Route path="/" component={Main} />
 			<Route path="/home" component={Homepage} />
+			<Route path="/all" component={AllDreams} />
 			<Route path="/login" component={LoginPage} />
 			<Route path="/create" component={CreateAccountPage} />
 		</Route>

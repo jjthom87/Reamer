@@ -9,7 +9,7 @@ class DreamList extends Component {
 	render() {
 		const { dreams, handleDeleteDream } = this.props;
 
-		var renderDreams = () => {
+		var renderNoDreams = () => {
 			if (dreams.length === 0){
 				return (
 					<p className="container__message">You Have Had No Dreams</p>
@@ -31,7 +31,7 @@ class DreamList extends Component {
 
 		return (
 			<div>
-				{renderDreams()}
+				{renderNoDreams()}
 			</div>
 		);
 	}

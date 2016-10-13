@@ -75,7 +75,6 @@ class Homepage extends Component {
 		});
 	}
 	componentWillMount(){
-		const { clientToken } = this.props;
 
 		fetch('/home', {
 			credentials: 'include',

@@ -1,14 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var exphbs = require('express-handlebars');
-var passport = require('passport');
-var session = require('express-session');
-// have to pass on a Store object on to the session
-var SequelizeStore = require('connect-session-sequelize')(session.Store);
-// using local strategy, and setting it up here to give options.
 var mysql = require('mysql');
-var LocalStrategy = require('passport-local').Strategy;
 var _ = require('underscore');
 var bcrypt = require('bcryptjs');
 var middleware = require('./middleware.js')(db);
@@ -40,6 +32,12 @@ app.get('/home', middleware.requireAuthentication, function (req, res){
         res.json(data);
       });
    });
+});
+
+app.get('/all', function (req, res){
+    models.Dream.findAll({}).then(function(success){
+      res.json(success);
+    });
 });
 
 app.post('/users/login', function (req, res) {

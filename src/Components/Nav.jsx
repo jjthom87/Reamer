@@ -18,6 +18,12 @@ class Nav extends Component {
 						<li>
 							<Link to='/login' activeClassName="active" activeStyle={{fontWeight: 'bold'}}>Login</Link>
 						</li>
+						<li>
+							<Link to='/home' activeClassName="active" activeStyle={{fontWeight: 'bold'}}>UserPage</Link>
+						</li>
+						<li>
+							<Link to='/all' activeClassName="active" activeStyle={{fontWeight: 'bold'}}>All Dreams</Link>
+						</li>
 					</ul>
 				</div>
 			</div>
