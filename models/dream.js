@@ -9,8 +9,9 @@ module.exports = function(sequelize, DataTypes) {
 			type: DataTypes.TEXT,
 			allowNull: false,
 		},
-    active: {
-      type: DataTypes.BOOLEAN
+    nightmare: {
+      type: DataTypes.STRING,
+      allowNull: false,
     }
   }, {
     classMethods: {

@@ -20,6 +20,7 @@ class DreamList extends Component {
 					<Dream
 						title={dream.title}
 						description={dream.description}
+						nightmare={dream.nightmare}
 						handleDeleteDream={handleDeleteDream}
 						id={dream.id}
 						key={index}

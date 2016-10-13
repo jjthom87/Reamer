@@ -6,7 +6,7 @@ var moment = require('moment');
 class Dream extends Component {
 
 	render() {
-		const { id, title, description, createdOn, handleDeleteDream } = this.props;
+		const { id, title, description, createdOn, handleDeleteDream, nightmare } = this.props;
 
 		var renderDate = () =>  {
 			var message = "Added on ";
@@ -19,6 +19,7 @@ class Dream extends Component {
 			<div className="text-center">
 				<p className="dreamTitle">{title}</p>
 				<p>{description}</p>
+				Nightmare: <p>{nightmare}</p>
 				<p>{renderDate()}</p>
 				<button className="button hollow" onClick={() => handleDeleteDream(id)}>Delete</button>
 			</div>

@@ -4,10 +4,18 @@ class AddDream extends Component {
 	constructor(...args){
 		super(...args)
 		this.state = {
+			selection: ''
 		}
+	}
+	handleRadio(e){
+		this.setState({
+			selection: e.target.value
+		})
 	}
 	onCreateDream(e){
 		e.preventDefault();
+
+		const { selection } = this.state;
 
 		var creds = {};
 		var title = this.refs.title.value;
@@ -23,9 +31,13 @@ class AddDream extends Component {
 			creds.description = description;
 		}
 
+		creds.selection = selection
+
 		this.props.onDreamCreate(creds);
 	}
 	render() {
+		const { selection } = this.state;
+
 		return (
 			<div className="row">
 				<div className="column small-centered small-11 medium-6 large-5">
@@ -38,6 +50,25 @@ class AddDream extends Component {
 							<div>
 								<textarea ref="description" placeholder="Dream Description"></textarea>
 							</div>
+							<p className="nightmareText">Nightmare?</p>
+								<div className="nightmareRadio">
+									Yes <input 
+											className="yesNightmare" 
+											type="radio" 
+											value="Yes" 
+											name="nightmareChoice"
+											checked={selection === "Yes"} 
+											onChange={this.handleRadio.bind(this)}
+										/>
+									No <input 
+											className="noNightmare" 
+											type="radio" 
+											value="No" 
+											name ="nightmareChoice"
+											checked={selection === "No"} 
+											onChange={this.handleRadio.bind(this)}
+										/>
+								</div>
 							<div>
 								<input className="button expanded hollow" type="submit" placeholder="Add Dream" />
 							</div>

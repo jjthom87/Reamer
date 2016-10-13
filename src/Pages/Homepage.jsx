@@ -13,8 +13,7 @@ class Homepage extends Component {
 		this.state = {
 			loginUser: '',
 			dreams: [],
-			createdOn: '',
-			clientToken: ''
+			createdOn: ''
 		};
 	}
 	handleDeleteDream(id){
@@ -40,10 +39,13 @@ class Homepage extends Component {
 	}
 	handleAddDream(text){
 		const { dreams } = this.state;
+
 		const newDream = {
 			title: text.title,
 			description: text.description,
+			nightmare: text.selection
 		};
+		console.log(newDream);
 		fetch('/dream/create', {
 			method: 'post',
 			body: JSON.stringify(newDream),

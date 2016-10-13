@@ -86,7 +86,7 @@ app.post('/dream/create', middleware.requireAuthentication, function(req, res){
         models.Dream.create({
             title: req.body.title,
             description: req.body.description,
-            active: false
+            nightmare: req.body.nightmare
         }).then(function(dream){
         req.user.addDream(dream).then(function(success){
         res.json(dream);
